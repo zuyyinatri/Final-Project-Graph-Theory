@@ -369,34 +369,64 @@ style: |
 ---
 
 <!-- _class: dark -->
+<style scoped>
+  section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .team-title {
+    text-align: center;
+    margin: 20px 0 0 0;
+  }
+  .team-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    column-gap: 60px;
+    align-items: center;
+    padding: 0 20px 20px 20px;
+  }
+  .member {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .member .name {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .member .id {
+    font-size: 20px;
+    font-weight: 500;
+    opacity: 0.85;
+    letter-spacing: 0.05em;
+  }
+</style>
+
 <div class="header-tag">Teknik Informatika 2026</div>
-<div class="columns-split s11">
-  <div>
-    <h2><span class="slash">/</span> About Us</h2>
-    <p class="s12">
-      Kami adalah tim mahasiswa Teknik Informatika yang fokus mengeksplorasi optimasi graf diskret. Pada proyek ini, kami merancang dan membuktikan implementasi heuristik pewarnaan graf paling efisien untuk memecahkan konflik sumber daya komputasi.
-    </p>
+
+<h2 class="team-title"><span class="slash">/</span> Team Members</h2>
+
+<div class="team-grid">
+  <div class="member">
+    <div class="name">Elba Galuh Hardiyanti</div>
+    <div class="id">5025251035</div>
   </div>
-  <div class="s13">
-    <h3 class="s14"><span class="slash">/</span> Team Members</h3>
-    <div class="s15">
-      <div>
-        <div class="s16">01 &nbsp; Galuh</div>
-        <div class="s17">Problem Formulation &amp; Theoretical Foundations</div>
-      </div>
-      <div>
-        <div class="s16">02 &nbsp; Zuyyin</div>
-        <div class="s17">Algorithm Strategy &amp; Welsh-Powell Design</div>
-      </div>
-      <div>
-        <div class="s16">03 &nbsp; Lina</div>
-        <div class="s17">Python Core Engine &amp; Tracing Implementation</div>
-      </div>
-      <div>
-        <div class="s16">04 &nbsp; Mai</div>
-        <div class="s17">Complexity Analysis, Benchmarking &amp; Testing</div>
-      </div>
-    </div>
+  <div class="member">
+    <div class="name">Lina Muslihah</div>
+    <div class="id">5025251063</div>
+  </div>
+  <div class="member">
+    <div class="name">Tri Zuyyina Rohmah</div>
+    <div class="id">5025251043</div>
+  </div>
+  <div class="member">
+    <div class="name">Maida Aqillah</div>
+    <div class="id">5025251XXX</div>
   </div>
 </div>
 
