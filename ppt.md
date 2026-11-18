@@ -3,680 +3,363 @@ marp: true
 theme: default
 paginate: true
 size: 16:9
+header: "Graph Coloring"
+footer: "Your Name · Course Name"
 style: |
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-  :root {
-    --bg-light: #f7f7f5;
-    --primary: #4c5b9e;
-    --primary-light: #6473b7;
-    --primary-dark: #374479;
-    --card-bg: #f0efe9;
-    --card-border: #e3e2dc;
-    --text-dark: #1e2029;
-    --text-muted: #5d6175;
-    --white: #ffffff;
-    --code-bg: #212534;
-    --code-text: #e2e8f0;
-  }
-
   section {
-    background-color: var(--bg-light);
-    color: var(--text-dark);
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    padding: 48px 64px;
-    font-size: 20px;
-    line-height: 1.5;
-    letter-spacing: -0.01em;
-  }
-
-  /* Slash Prefix for Headings */
-  h1, h2, h3 {
-    color: var(--primary);
-    font-weight: 700;
-    margin: 0 0 20px 0;
-    letter-spacing: -0.02em;
-  }
-
-  h1 { font-size: 46px; line-height: 1.15; }
-  h2 { font-size: 38px; line-height: 1.2; }
-  h3 { font-size: 24px; line-height: 1.25; }
-
-  .slash {
-    color: var(--primary);
-    font-weight: 800;
-    margin-right: 4px;
-  }
-
-  .header-tag {
-    position: absolute;
-    top: 40px;
-    right: 64px;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--primary);
-    letter-spacing: 0.02em;
-  }
-
-  .footer-prepared {
-    position: absolute;
-    bottom: 40px;
-    right: 64px;
-    font-size: 15px;
-    color: var(--text-dark);
-    text-align: right;
-  }
-  .footer-prepared span.label {
-    color: var(--primary);
-    font-weight: 700;
-    margin-right: 12px;
-  }
-  .footer-prepared span.names {
-    font-weight: 500;
-  }
-
-  /* Slide Variations */
-  section.dark {
-    background-color: var(--primary);
-    color: var(--white);
-  }
-  section.dark h1, section.dark h2, section.dark h3, section.dark .slash {
-    color: var(--white);
-  }
-  section.dark .header-tag, section.dark .footer-prepared, section.dark .footer-prepared span.label {
-    color: #d8def8;
-  }
-
-  /* Two Column Layouts */
-  .columns-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    height: 80%;
-    align-items: stretch;
-  }
-
-  .columns-split {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 36px;
-    height: 82%;
-    align-items: stretch;
-  }
-
-  /* Cards */
-  .card {
-    background-color: var(--card-bg);
-    border-radius: 12px;
-    padding: 24px 28px;
-    box-sizing: border-box;
-  }
-
-  .card h3 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    color: var(--primary);
-  }
-
-  /* 4 Columns (Slide 6 style) */
-  .grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-    margin-top: 24px;
-  }
-  .card-col {
-    background-color: var(--card-bg);
-    padding: 24px 18px;
-    border-radius: 10px;
-    min-height: 380px;
-    display: flex;
-    flex-direction: column;
-  }
-  .card-col .step-num {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--primary);
-    margin-bottom: 24px;
-  }
-  .card-col .step-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 12px;
-  }
-  .card-col p {
-    font-size: 15px;
-    color: var(--text-dark);
-    line-height: 1.45;
-    margin: 0;
-  }
-
-  /* 2x2 Grid (Slide 9 style) */
-  .grid-2x2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px;
-    margin-top: 24px;
-    height: 75%;
-  }
-  .grid-2x2 .card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-  }
-  .grid-2x2 .card h3 {
-    font-size: 22px;
-    margin-bottom: 8px;
-  }
-  .grid-2x2 .card p {
-    font-size: 16px;
-    margin: 0;
-    color: var(--text-dark);
-  }
-
-  /* Circle Badges Row (Slide 5 style) */
-  .circles-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 60px;
-  }
-  .circle-item {
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background-color: var(--primary);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-    font-weight: 700;
-    font-size: 19px;
-    line-height: 1.3;
-    padding: 24px;
-    box-sizing: border-box;
-    box-shadow: 0 10px 24px rgba(76, 91, 158, 0.2);
-  }
-  .circle-divider {
-    font-size: 38px;
-    font-weight: 800;
-    color: var(--primary);
-  }
-
-  /* Pill Tags (Slide 7 style) */
-  .pill-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .pill-tag {
-    background-color: var(--primary);
-    color: var(--white);
-    border-radius: 999px;
-    padding: 12px 20px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: 0.01em;
-  }
-
-  /* Code Blocks */
-  pre {
-    background-color: var(--code-bg) !important;
-    color: var(--code-text) !important;
-    border-radius: 10px;
-    padding: 16px 20px;
-    font-family: 'JetBrains Mono', Consolas, monospace;
-    font-size: 13.5px;
-    line-height: 1.45;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-  }
-  code {
-    font-family: 'JetBrains Mono', Consolas, monospace;
-    font-size: 0.9em;
-  }
-
-  /* Iteration Cards */
-  .iter-box {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 28px;
     background: #ffffff;
-    border-left: 5px solid var(--primary);
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    color: #2c3e50;
   }
-  .iter-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 700;
-    font-size: 17px;
-    color: var(--primary);
-    margin-bottom: 6px;
-  }
-  .iter-badge {
-    background: var(--primary);
-    color: white;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-  }
-  .iter-desc {
-    font-size: 14px;
-    color: var(--text-dark);
-    line-height: 1.4;
-  }
-  /* Layout helpers (moved from inline styles so exports without --html still work) */
-  .s1 { margin-top: 140px !important; }
-  .s2 { font-size: 64px !important; line-height: 1.1 !important; margin-bottom: 12px !important; }
-  .s3 { font-size: 22px !important; color: var(--text-muted) !important; font-weight: 500 !important; margin-top: 8px !important; }
-  .s4 { margin-top: 20px !important; align-items: center !important; }
-  .s5 { font-size: 52px !important; }
-  .s6 { color: var(--text-muted) !important; font-size: 18px !important; max-width: 380px !important; }
-  .s7 { display: flex !important; flex-direction: column !important; gap: 14px !important; padding-left: 40px !important; }
-  .s8 { display: flex !important; gap: 20px !important; align-items: baseline !important; }
-  .s9 { font-size: 24px !important; font-weight: 800 !important; color: var(--primary) !important; }
-  .s10 { font-size: 21px !important; font-weight: 600 !important; }
-  .s11 { margin-top: 15px !important; }
-  .s12 { font-size: 18px !important; line-height: 1.6 !important; color: #eceffc !important; margin-top: 24px !important; max-width: 440px !important; }
-  .s13 { padding-left: 20px !important; }
-  .s14 { font-size: 22px !important; color: #ffffff !important; margin-bottom: 24px !important; }
-  .s15 { display: flex !important; flex-direction: column !important; gap: 16px !important; }
-  .s16 { font-size: 18px !important; font-weight: 700 !important; color: #ffffff !important; }
-  .s17 { font-size: 14px !important; color: #d0d7fb !important; }
-  .s18 { margin-top: 10px !important; }
-  .s19 { font-size: 17px !important; line-height: 1.6 !important; color: var(--text-dark) !important; margin-top: 24px !important; padding-right: 20px !important; }
-  .s20 { font-size: 16px !important; line-height: 1.6 !important; color: var(--text-muted) !important; margin-top: 14px !important; padding-right: 20px !important; }
-  .s21 { display: flex !important; flex-direction: column !important; justify-content: center !important; gap: 16px !important; }
-  .s22 { font-size: 20px !important; }
-  .s23 { font-weight: 700 !important; font-size: 14px !important; color: var(--primary) !important; }
-  .s24 { font-size: 15px !important; color: var(--text-dark) !important; }
-  .s25 { color: var(--text-muted) !important; font-size: 17px !important; margin-top: -10px !important; }
-  .s26 { font-size: 13px !important; font-weight: 400 !important; opacity: 0.9 !important; margin-top: 6px !important; display: block !important; }
-  .s27 { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 30px !important; margin-top: 35px !important; }
-  .s28 { text-align: center !important; font-size: 20px !important; }
-  .s29 { margin-top: 20px !important; }
-  .s30 { display: flex !important; flex-direction: column !important; justify-content: center !important; gap: 14px !important; }
-  .s31 { font-size: 19px !important; }
-  .s32 { font-size: 14px !important; margin: 0 !important; line-height: 1.5 !important; }
-  .s33 { color: var(--text-muted) !important; font-size: 16px !important; margin-top: -10px !important; }
-  .s34 { margin-top: 150px !important; }
-  .s35 { font-size: 72px !important; line-height: 1.1 !important; margin-bottom: 12px !important; }
-  .s36 { margin-bottom: 6px !important; }
-  .s37 { font-size: 14px !important; color: var(--text-muted) !important; }
+  h1 { color: #2980b9; }
+  h2 { color: #c0392b; border-bottom: 3px solid #f1c40f; padding-bottom: 6px; }
+  strong { color: #c0392b; }
+  table { font-size: 22px; margin: 0 auto; }
+  th { background: #2980b9; color: white; }
+  code { background: #ecf0f1; }
+  section.lead { text-align: center; justify-content: center; }
+  section.lead h1 { font-size: 56px; }
+  section.small { font-size: 22px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .red { color: #e74c3c; font-weight: bold; }
+  .blue { color: #3498db; font-weight: bold; }
+  .green { color: #27ae60; font-weight: bold; }
 ---
 
+<!-- _class: lead -->
 <!-- _paginate: false -->
-<div class="header-tag">Teknik Informatika 2026</div>
-<div class="s1">
-  <h1 class="s2">
-    <span class="slash">/</span> Final Project<br>Graph Theory
-  </h1>
-  <p class="s3">
-    Optimasi Graph Coloring Menggunakan Algoritma Welsh-Powell
-  </p>
-</div>
-<div class="footer-prepared">
-  <span class="label">prepared by</span>
-  <span class="names">Galuh &nbsp;|&nbsp; Zuyyin &nbsp;|&nbsp; Lina &nbsp;|&nbsp; Mai</span>
-</div>
+<!-- _header: "" -->
+<!-- _footer: "" -->
+
+# Graph Coloring
+## Concepts, Algorithms, and Real-World Implementation
+
+Your Name · Student ID
+Course Name · Lecturer · Date
+
+<!--
+Greet the audience. Open with: "How can we assign colors to things so that conflicting things never share the same color?"
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<div class="columns-2 s4">
-  <div>
-    <h2 class="s5"><span class="slash">/</span> Contents</h2>
-    <p class="s6">
-      Struktur pembahasan final project implementasi teori graf dan pewarnaan simpul (vertex coloring).
-    </p>
-  </div>
-  <div class="s7">
-    <div class="s8">
-      <span class="s9">01</span>
-      <span class="s10">About Us &amp; Team Roles</span>
-    </div>
-    <div class="s8">
-      <span class="s9">02</span>
-      <span class="s10">Problem Overview &amp; Complexity</span>
-    </div>
-    <div class="s8">
-      <span class="s9">03</span>
-      <span class="s10">Proposed Strategy (Welsh-Powell)</span>
-    </div>
-    <div class="s8">
-      <span class="s9">04</span>
-      <span class="s10">Python Implementation</span>
-    </div>
-    <div class="s8">
-      <span class="s9">05</span>
-      <span class="s10">Step-by-Step Iteration Process</span>
-    </div>
-    <div class="s8">
-      <span class="s9">06</span>
-      <span class="s10">Analysis &amp; Deliverables</span>
-    </div>
-  </div>
-</div>
+## Agenda
+
+1. What is Graph Coloring?
+2. Key concepts and theorems
+3. Algorithms
+4. Step-by-step example
+5. Applications / implementations (**main focus**)
+6. Code and **live demo**
+7. Conclusion
+
+<!--
+Most of the time goes to real implementations, followed by a live demo.
+-->
 
 ---
 
-<!-- _class: dark -->
-<style scoped>
-  section {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  .team-title {
-    text-align: center;
-    margin: 20px 0 0 0;
-  }
-  .team-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    column-gap: 60px;
-    align-items: center;
-    padding: 0 20px 20px 20px;
-  }
-  .member {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .member .name {
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 1.15;
-    white-space: nowrap;
-  }
-  .member .id {
-    font-size: 20px;
-    font-weight: 500;
-    opacity: 0.85;
-    letter-spacing: 0.05em;
-  }
-</style>
+## Motivation: A Real Problem
 
-<div class="header-tag">Teknik Informatika 2026</div>
+> A university has 6 exams. Some students take several exams. Two exams with a shared student **cannot be at the same time**.
+> What is the **minimum number of time slots** needed?
 
-<h2 class="team-title"><span class="slash">/</span> Team Members</h2>
+| Real world | Graph |
+|---|---|
+| Exam | Vertex |
+| Shared student | Edge |
+| Time slot | **Color** |
 
-<div class="team-grid">
-  <div class="member">
-    <div class="name">Elba Galuh Hardiyanti</div>
-    <div class="id">5025251035</div>
-  </div>
-  <div class="member">
-    <div class="name">Lina Muslihah</div>
-    <div class="id">5025251063</div>
-  </div>
-  <div class="member">
-    <div class="name">Tri Zuyyina Rohmah</div>
-    <div class="id">5025251043</div>
-  </div>
-  <div class="member">
-    <div class="name">Maida Aqillah</div>
-    <div class="id">5025251XXX</div>
-  </div>
-</div>
+<!--
+A scheduling problem is secretly a graph problem. Tip: show a table of exams on the left and the same data drawn as a graph on the right.
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<div class="columns-split s18">
-  <div>
-    <h2><span class="slash">/</span> Project<br>Overview</h2>
-    <p class="s19">
-      <strong>Vertex Coloring</strong> adalah penugasan warna/label pada setiap simpul graf <i>G</i> = (<i>V</i>, <i>E</i>) dengan aturan ketat: <em>tidak boleh ada dua simpul bertetangga (terhubung oleh sisi yang sama) yang memiliki warna serupa</em>.
-    </p>
-    <p class="s20">
-      Tujuan utama adalah meminimalkan total warna yang digunakan, yang dikenal sebagai <strong>Bilangan Kromatik</strong> χ(<i>G</i>).
-    </p>
-  </div>
-  <div class="card s21">
-    <h3 class="s22"><span class="slash">/</span> Formal Definition</h3>
-    <div>
-      <div class="s23">MATHEMATICAL MODEL</div>
-      <div class="s24"><i>c</i> : <i>V</i> → {1, 2, …, <i>k</i>} &emsp; s.t. &emsp; (<i>u</i>, <i>v</i>) ∈ <i>E</i> ⇒ <i>c</i>(<i>u</i>) ≠ <i>c</i>(<i>v</i>)</div>
-    </div>
-    <div>
-      <div class="s23">OPTIMAL OBJECTIVE</div>
-      <div class="s24">Cari <i>k</i><sub>min</sub> = χ(<i>G</i>) (Chromatic Number)</div>
-    </div>
-    <div>
-      <div class="s23">COMPLEXITY CLASS</div>
-      <div class="s24"><strong>NP-Hard</strong> (Pencarian eksak eksponensial O(<i>k</i><sup><i>V</i></sup>))</div>
-    </div>
-  </div>
-</div>
+## What is Graph Coloring?
+
+- **Graph** G = (V, E): vertices V, edges E
+- **Graph coloring:** give each vertex a color so that **no two adjacent vertices share a color**
+- A coloring with *k* colors is a **k-coloring**
+- **Goal:** use as few colors as possible
+
+<span class="green">✔ Valid:</span> neighbors always differ
+<span class="red">✘ Invalid:</span> two adjacent vertices have the same color
+
+<!--
+Stress the single rule: neighbors must differ. "Colors" can be anything: integers, time slots, frequencies, registers.
+Optional: insert two small graph images here (valid vs invalid).
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<h2><span class="slash">/</span> Real-World Applications</h2>
-<p class="s25">
-  Mengapa Graph Coloring sangat krusial dalam pemecahan masalah komputasi dan teknik industri?
-</p>
-<div class="circles-row">
-  <div class="circle-item">
-    <div>Timetable &amp; Exam<br>Scheduling</div>
-    <span class="s26">Mencegah jadwal ujian mahasiswa yang bentrok</span>
-  </div>
-  <div class="circle-divider">/</div>
-  <div class="circle-item">
-    <div>Frequency<br>Assignment</div>
-    <span class="s26">Mencegah interferensi sinyal antar pemancar BTS</span>
-  </div>
-  <div class="circle-divider">/</div>
-  <div class="circle-item">
-    <div>Compiler Register<br>Allocation</div>
-    <span class="s26">Optimasi alokasi variabel register CPU terbatas</span>
-  </div>
-</div>
+## Key Terminology
+
+| Term | Meaning |
+|---|---|
+| **Proper coloring** | No adjacent vertices share a color |
+| **Chromatic number χ(G)** | Minimum number of colors needed |
+| **Clique** | Vertices that are all mutually adjacent |
+| **Max degree Δ(G)** | Largest number of neighbors of any vertex |
+| **Independent set** | Vertices with no edges between them |
+
+Each color class is an **independent set**.
+
+<!--
+Graph coloring = partitioning the vertices into the fewest independent sets.
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<h2><span class="slash">/</span> Proposed Strategy</h2>
-<p class="s25">
-  Mengapa memilih <strong>Algoritma Welsh-Powell</strong> sebagai solusi paling efisien?
-</p>
-<div class="grid-4">
-  <div class="card-col">
-    <div class="step-num">01</div>
-    <div class="step-title">The NP-Hard Challenge</div>
-    <p>Pencarian brute-force memerlukan O(<i>k</i><sup><i>V</i></sup>) kombinasi. Tidak layak secara komputasi untuk graf dengan puluhan hingga ratusan simpul.</p>
-  </div>
-  <div class="card-col">
-    <div class="step-num">02</div>
-    <div class="step-title">Greedy Heuristic</div>
-    <p>Pendekatan Greedy membuat keputusan lokal optimal di tiap langkah tanpa backtracking, menghasilkan eksekusi yang luar biasa cepat.</p>
-  </div>
-  <div class="card-col">
-    <div class="step-num">03</div>
-    <div class="step-title">Welsh-Powell Power</div>
-    <p>Mengurutkan simpul berdasarkan derajat (degree) menurun. Simpul tersulit (derajat tertinggi) diwarnai lebih awal untuk meminimalkan konflik.</p>
-  </div>
-  <div class="card-col">
-    <div class="step-num">04</div>
-    <div class="step-title">Guaranteed Bound</div>
-    <p>Kompleksitas O(<i>V</i> log <i>V</i> + <i>V</i> + <i>E</i>). Memberikan jaminan batas atas χ(<i>G</i>) ≤ Δ(<i>G</i>) + 1, di mana Δ adalah derajat maksimum.</p>
-  </div>
-</div>
+<!-- _class: small -->
+
+## Properties & Theorems
+
+- **Lower bound:** χ(G) ≥ ω(G) (size of the largest clique)
+- **Upper bound:** χ(G) ≤ Δ(G) + 1 (greedy guarantee)
+- **Brooks' theorem:** χ(G) ≤ Δ(G), unless G is a complete graph or an odd cycle
+- **Special graphs:**
+  - Complete graph Kₙ → χ = n
+  - Bipartite graph / tree → χ ≤ 2
+  - Even cycle → 2, odd cycle → 3
+- **Four Color Theorem:** every planar graph (e.g., a map) is 4-colorable (Appel & Haken, 1976)
+
+<!--
+Don't prove anything. Present these as tools for estimating how many colors are needed.
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<h2><span class="slash">/</span> Scope of Work</h2>
-<p class="s25">
-  Tiga pilar alur kerja sistem pewarnaan graf Welsh-Powell
-</p>
-<div class="s27">
-  <div>
-    <h3 class="s28"><span class="slash">/</span> 01 Pre-Processing</h3>
-    <div class="pill-group s29">
-      <div class="pill-tag">Adjacency List Modeling</div>
-      <div class="pill-tag">Degree Count: deg(v) = |N(v)|</div>
-      <div class="pill-tag">Descending Sort by Degree</div>
-    </div>
-  </div>
-  <div>
-    <h3 class="s28"><span class="slash">/</span> 02 Coloring Core</h3>
-    <div class="pill-group s29">
-      <div class="pill-tag">Color Palette Initialization</div>
-      <div class="pill-tag">Iterative Round Assignment</div>
-      <div class="pill-tag">Adjacency Conflict Checker</div>
-    </div>
-  </div>
-  <div>
-    <h3 class="s28"><span class="slash">/</span> 03 Output &amp; Analysis</h3>
-    <div class="pill-group s29">
-      <div class="pill-tag">Iteration Process Tracing</div>
-      <div class="pill-tag">Chromatic Upper Bound Verify</div>
-      <div class="pill-tag">Conflict-Free Final Output</div>
-    </div>
-  </div>
-</div>
+## Computational Complexity
+
+- Is G **2-colorable**? Easy: O(V + E) with BFS/DFS
+- Is G **k-colorable** for k ≥ 3? **NP-complete**
+- Finding the exact χ(G) is **NP-hard**
+
+**So in practice:**
+- **Heuristics:** fast, good, not always optimal
+- **Exact algorithms:** only for small graphs
+
+<!--
+This explains why we study several algorithms instead of one perfect one.
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<h2><span class="slash">/</span> Python Implementation</h2>
-<div class="columns-split s18">
-  <div>
-    <pre><code class="language-python">def welsh_powell(graph):
-    # 1. Hitung derajat &amp; urutkan descending
-    degrees = {u: len(adj) for u, adj in graph.items()}
-    nodes = sorted(graph, key=lambda u: degrees[u], reverse=True)
-&nbsp;
-    colors = {}
-    color_id = 1
-    uncolored = list(nodes)
-&nbsp;
-    # 2. Iterasi pewarnaan per ronde
-    while uncolored:
-        colored_this_round = []
-        for u in list(uncolored):
-            # Cek konflik tetangga dengan warna saat ini
-            if not any(v in graph[u] for v in colored_this_round):
-                colors[u] = f"Warna_{color_id}"
-                colored_this_round.append(u)
-                uncolored.remove(u)
-        color_id += 1
-&nbsp;
+<!-- _class: small -->
+
+## Algorithms Overview
+
+| Algorithm | Type | Idea | Complexity |
+|---|---|---|---|
+| **Greedy** | Heuristic | Color in given order, pick smallest free color | O(V + E) |
+| **Welsh–Powell** | Heuristic | Greedy, sorted by **degree (descending)** | O(V²) |
+| **DSATUR** | Heuristic | Next vertex = **most distinct neighbor colors** | O(V²) |
+| **Backtracking** | Exact | Try colors, undo on conflict | Exponential |
+
+<!--
+Greedy depends on vertex order. Welsh-Powell and DSATUR improve the order. Backtracking is exact for a given k but slow.
+-->
+
+---
+
+## Welsh–Powell Algorithm
+
+```text
+1. Sort vertices by degree, highest first
+2. color = 1
+3. While uncolored vertices remain:
+     a. Give `color` to the first uncolored vertex
+     b. Walk down the list: give `color` to every uncolored
+        vertex NOT adjacent to a vertex already given `color`
+     c. color = color + 1
+```
+
+**Intuition:** high-degree vertices are the most constrained, so color them first.
+
+---
+
+<!-- _class: small -->
+
+## Worked Example: Welsh–Powell
+
+**Edges:** `A-B, A-C, A-D, B-C, B-E, C-F, D-E, E-F`
+
+<div class="cols">
+<div>
+
+| Vertex | A | B | C | D | E | F |
+|---|---|---|---|---|---|---|
+| Degree | 3 | 3 | 3 | 2 | 3 | 2 |
+
+Sorted order: **A, B, C, E, D, F**
+
+**Result:** 3 colors → χ(G) = 3
+A-B-C is a triangle, so 3 is also the lower bound: **optimal**.
+
+</div>
+<div>
+
+| Step | Action | Class |
+|---|---|---|
+| <span class="red">Color 1</span> | A ✓, B ✗, C ✗, E ✓, D ✗, F ✗ | {A, E} |
+| <span class="blue">Color 2</span> | B ✓, C ✗, D ✓, F ✓ | {B, D, F} |
+| <span class="green">Color 3</span> | C ✓ | {C} |
+
+</div>
+</div>
+
+<!--
+Walk through the table slowly. The triangle A-B-C proves we can't do better than 3.
+Tip: draw the graph in draw.io or PowerPoint and animate Red -> Blue -> Green, or insert an image: ![w:400](coloring.png)
+-->
+
+---
+
+## Application 1: Scheduling
+
+**Exam / class timetabling**
+
+- Vertex = exam or course
+- Edge = shared students, lecturer, or room
+- Color = **time slot**
+- Minimum colors = **minimum number of time slots**
+
+Also used for meeting schedules, shift planning, and sports fixtures.
+
+<!--
+Link back to the motivating example. Used by universities worldwide.
+-->
+
+---
+
+<!-- _class: small -->
+
+## Application 2: Other Real-World Uses
+
+| Domain | Vertices | Edge means | Color = |
+|---|---|---|---|
+| **Map coloring** | Countries / provinces | Share a border | Map color |
+| **Register allocation** (compilers) | Variables | Alive at the same time | CPU register |
+| **Channel assignment** | Wi-Fi routers / towers | Interference range | Frequency channel |
+| **Sudoku** | 81 cells | Same row/column/box | Digit 1–9 |
+| **Traffic lights** | Road movements | Would collide | Signal phase |
+| **Chemical storage** | Chemicals | Dangerous together | Storage room |
+
+<!--
+Pick 2-3 to explain in more detail. Compilers and Wi-Fi channels are great for informatics students.
+-->
+
+---
+
+<!-- _class: small -->
+
+## Implementation (Python)
+
+```python
+def welsh_powell(graph):
+    order = sorted(graph, key=lambda v: len(graph[v]), reverse=True)
+    colors, c = {}, 0
+    while len(colors) < len(graph):
+        c += 1
+        for v in order:
+            if v not in colors and all(colors.get(u) != c for u in graph[v]):
+                colors[v] = c
     return colors
-</code></pre>
-  </div>
-  <div class="card s30">
-    <h3 class="s31"><span class="slash">/</span> Key Algorithmic Steps</h3>
-    <p class="s32">
-      <strong>1. Adjacency List:</strong> Graf disimpan dalam <code>dict</code> Python untuk akses tetangga simpul dalam O(1) amortized.
-    </p>
-    <p class="s32">
-      <strong>2. Sort Derajat (O(<i>V</i> log <i>V</i>)):</strong> Mengurutkan simpul secara menurun menjamin simpul dengan potensi bentrok terbesar diwarnai lebih dahulu.
-    </p>
-    <p class="s32">
-      <strong>3. Independent Set Search:</strong> Pada setiap iterasi, simpul-simpul yang tidak saling berhubungan diberi warna yang sama secara maksimal.
-    </p>
-  </div>
-</div>
+```
+
+- Graph = **adjacency list** (`dict` of sets)
+- Code mirrors the pseudocode of Welsh–Powell
+- Full code: `graph_coloring_demo.py`
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<h2><span class="slash">/</span> Step-by-Step Iteration Process</h2>
-<p class="s33">
-  Graf Uji 6 Simpul: <strong>C(4), D(4), E(4), A(3), B(3), F(2)</strong> &mdash; Urutan Prioritas Derajat
-</p>
-<div class="s11">
-  <div class="iter-box">
-    <div class="iter-header">
-      <span>Iterasi 1: Alokasi Warna 1 (Biru)</span>
-      <span class="iter-badge">Selesai: { C, F }</span>
-    </div>
-    <div class="iter-desc">
-      &bull; <strong>C</strong> (derajat 4) diwarnai pertama kali.<br>
-      &bull; Simpul <strong>D, E, A, B</strong> dilewati karena bertetangga langsung dengan C.<br>
-      &bull; Simpul <strong>F</strong> tidak bertetangga dengan C &rarr; Diberi <strong>Warna 1 (Biru)</strong>.
-    </div>
-  </div>
-  <div class="iter-box">
-    <div class="iter-header">
-      <span>Iterasi 2: Alokasi Warna 2 (Merah)</span>
-      <span class="iter-badge">Selesai: { D, B }</span>
-    </div>
-    <div class="iter-desc">
-      &bull; <strong>D</strong> (belum berwarna, derajat tertinggi) diberi Warna 2.<br>
-      &bull; Simpul <strong>E, A</strong> dilewati karena bertetangga dengan D.<br>
-      &bull; Simpul <strong>B</strong> tidak bertetangga dengan D &rarr; Diberi <strong>Warna 2 (Merah)</strong>.
-    </div>
-  </div>
-  <div class="iter-box">
-    <div class="iter-header">
-      <span>Iterasi 3: Alokasi Warna 3 (Hijau)</span>
-      <span class="iter-badge">Selesai: { E, A }</span>
-    </div>
-    <div class="iter-desc">
-      &bull; <strong>E</strong> diberi Warna 3.<br>
-      &bull; Simpul <strong>A</strong> tersisa dan tidak bertetangga dengan E &rarr; Diberi <strong>Warna 3 (Hijau)</strong>. Semua simpul terwarnai!
-    </div>
-  </div>
-</div>
+<!-- _class: lead -->
+
+## Live Demo
+# Exam Scheduling with Graph Coloring
+
+Input: exams + conflicts
+Output: time slot per exam + graph picture
+
+<!--
+Switch to terminal/notebook.
+1. Show the data (30 s)
+2. Run the script: Greedy, Welsh-Powell, DSATUR (1 min)
+3. Show exact answer by backtracking (30 s)
+4. Show the schedule (30 s)
+5. Show coloring.png (30 s)
+Backup: have a screenshot or screen recording ready.
+-->
 
 ---
 
-<div class="header-tag">Teknik Informatika 2026</div>
-<h2><span class="slash">/</span> Deliverables &amp; Results</h2>
-<p class="s25">
-  Ringkasan evaluasi output algoritma pada kasus uji representatif
-</p>
-<div class="grid-2x2">
-  <div class="card">
-    <h3>Optimal Chromatic Number</h3>
-    <p>Hanya membutuhkan <strong>3 Warna</strong> (Biru, Merah, Hijau) dari batas atas teoritis (Δ + 1 = 5).</p>
-  </div>
-  <div class="card">
-    <h3>Zero Conflict Guarantee</h3>
-    <p>100% validitas terbukti: Tidak ada dua simpul bertetangga yang berbagi warna yang sama.</p>
-  </div>
-  <div class="card">
-    <h3>Time Complexity</h3>
-    <p>Eksekusi instan O(<i>V</i> log <i>V</i> + <i>V</i> + <i>E</i>). Sangat efisien dibandingkan pencarian eksak yang eksponensial.</p>
-  </div>
-  <div class="card">
-    <h3>Space Complexity</h3>
-    <p>Penggunaan memori linear O(<i>V</i> + <i>E</i>) dengan representasi Adjacency List yang ringan.</p>
-  </div>
-</div>
+## Demo Code (excerpt)
+
+```python
+exams = {
+    "Calculus":    ["Physics", "Algebra", "Statistics"],
+    "Physics":     ["Calculus", "Algebra", "Chemistry"],
+    "Algebra":     ["Calculus", "Physics", "Programming"],
+    "Statistics":  ["Calculus", "Chemistry"],
+    "Chemistry":   ["Physics", "Statistics", "Programming"],
+    "Programming": ["Algebra", "Chemistry"],
+}
+graph = {v: set(ns) for v, ns in exams.items()}
+
+result = dsatur(graph)          # or welsh_powell(graph)
+k = chromatic_number(graph)     # exact, via backtracking
+```
+
+<!--
+Full script is in Appendix A of the presentation material file.
+-->
 
 ---
 
-<!-- _paginate: false -->
-<div class="header-tag">Teknik Informatika 2026</div>
-<div class="s34">
-  <h1 class="s35">
-    <span class="slash">/</span> Thank<br>You
-  </h1>
-  <p class="s3">
-    Ada pertanyaan seputar Graph Coloring &amp; Welsh-Powell?
-  </p>
-</div>
-<div class="footer-prepared">
-  <div class="s36">
-    <span class="label">prepared by</span>
-    <span class="names">Galuh &nbsp;|&nbsp; Zuyyin &nbsp;|&nbsp; Lina &nbsp;|&nbsp; Mai</span>
-  </div>
-  <div class="s37">
-    Teknik Informatika &bull; Final Project Teori Graf 2026
-  </div>
-</div>
+## Conclusion
+
+- Graph coloring turns **conflict problems** into a clean graph model
+- Optimal coloring is **NP-hard**, but **Welsh–Powell** and **DSATUR** work well in practice
+- Applications: **scheduling, compilers, wireless networks, maps, Sudoku**
+
+> **Key takeaway:** *If things conflict, think graph coloring.*
+
+---
+
+<!-- _class: lead -->
+
+# Thank You
+## Questions?
+
+---
+
+<!-- _class: small -->
+
+## References
+
+- West, D. B. (2001). *Introduction to Graph Theory* (2nd ed.). Prentice Hall.
+- Rosen, K. H. *Discrete Mathematics and Its Applications*. McGraw-Hill.
+- Welsh, D. J. A., & Powell, M. B. (1967). An upper bound for the chromatic number of a graph and its application to timetabling problems. *The Computer Journal*, 10(1).
+- Brélaz, D. (1979). New methods to color the vertices of a graph. *Communications of the ACM*, 22(4).
+- Appel, K., & Haken, W. (1977). Every planar map is four colorable. *Illinois Journal of Mathematics*.
+- Chaitin, G. J. et al. (1981). Register allocation via coloring. *Computer Languages*, 6(1).
+
+<!--
+Verify citation details against your course's format.
+-->
+
+---
+
+<!-- _class: small -->
+
+## Backup: Possible Q&A
+
+| Question | Short answer |
+|---|---|
+| Why not always use backtracking? | Exponential time; infeasible for large graphs |
+| Is greedy ever optimal? | Sometimes; depends on vertex order |
+| Welsh–Powell vs DSATUR? | W-P fixes the order by degree once; DSATUR chooses dynamically by neighbor colors |
+| Is χ(G) = biggest clique? | No, only a lower bound (the 5-cycle: clique 2, needs 3 colors) |
+| Why the Four Color Theorem? | Any map needs ≤ 4 colors; first major theorem proven with computer help |
